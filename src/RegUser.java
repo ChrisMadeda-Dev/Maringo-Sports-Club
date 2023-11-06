@@ -4,11 +4,17 @@ import java.awt.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class RegUser extends JPanel {
     public RegUser(){
+
+
 
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         JFormattedTextField dateField = new JFormattedTextField(dateFormat);
@@ -114,27 +120,68 @@ public class RegUser extends JPanel {
         btnRegUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                String regAsChoice = (String) CbUregas.getSelectedItem();
 
-                if(regAsChoice == "Individual"){
-                    JOptionPane.showMessageDialog(null,"Your registering as Individual, Amount 1000 will be Debited");
-                    String a = JOptionPane.showInputDialog(null,"Enter Mpesa Number");
-                    int b = Integer.valueOf(a);
-                    if(a.length()>=8){
-                        JOptionPane.showMessageDialog(null,"Amount " + b + " has been Debited");
-                    }else{
-                        JOptionPane.showMessageDialog(null,"Invalid Mpesa Number");
+
+
+                try{
+                    Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/MaringoSportsClub","root","#jonam.81");
+                    Statement statement = connection.createStatement();
+
+                    String insertToSql= "INSERT INTO user_registration(userName,userHeight,userWeight,userGender,NextofKin,InstituteName, CurrentAge,SubCounty,RegisterAs,SpecialNeed,charge)" +
+                            "VALUE(?,?,?,?,?,?,?,?,?,?,?)";
+                    PreparedStatement preparedStatement = connection.prepareStatement(insertToSql);
+
+                    //Get specific inputs
+
+
+
+                    if(tfUname.getText()!="" && tfUinstitute.getText() != "" && tfUtel.getText()!=""){
+
+                        preparedStatement.setString(1,tfUname.getText());
+                        preparedStatement.setInt(2,Integer.valueOf(tfUheight.getText()));
+                        preparedStatement.setInt(3,Integer.valueOf(tfUweight.getText()));
+                        preparedStatement.setString(4,String.valueOf(CbUgender.getSelectedItem()));
+                        preparedStatement.setString(5,tfUnextofkin.getText());
+                        preparedStatement.setString(6,tfUinstitute.getText());
+                        preparedStatement.setInt(7,Integer.valueOf(tfUage.getText()));
+                        preparedStatement.setString(8,String.valueOf(CbUsubcounty.getSelectedItem()));
+                        preparedStatement.setString(9,String.valueOf(CbUregas.getSelectedItem()));
+                        preparedStatement.setString(10,tfUspecialneed.getText());
+
+
+                        String regAsChoice = (String) CbUregas.getSelectedItem();
+
+                        if(regAsChoice == "Individual"){
+                            JOptionPane.showMessageDialog(null,"Your registering as Individual, Amount 1000 will be Debited");
+                            String a = JOptionPane.showInputDialog(null,"Enter Mpesa Number");
+                            int b = Integer.valueOf(a);
+                            if(a.length()>=8){
+                                JOptionPane.showMessageDialog(null,"Amount " + b + " has been Debited");
+                                preparedStatement.setString(11,"1000");
+                            }else{
+                                JOptionPane.showMessageDialog(null,"Invalid Mpesa Number");
+                            }
+                        }
+
+                        if(regAsChoice =="Group"){
+                            String a = JOptionPane.showInputDialog(null,"Enter Group code");
+                            int b = Integer.valueOf(a);
+                            if(a!=""){
+                                JOptionPane.showMessageDialog(null,"Group has been Verified Welcome");
+                                preparedStatement.setString(11,"500");
+                            }
+
+                        }
                     }
+
+                    preparedStatement.executeUpdate();
+                    connection.close();
+                    JOptionPane.showMessageDialog(null,"User is sucessfully Registered");
+
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
 
-                if(regAsChoice =="Group"){
-                    String a = JOptionPane.showInputDialog(null,"Enter Group code");
-                    int b = Integer.valueOf(a);
-                    if(a!=""){
-                        JOptionPane.showMessageDialog(null,"Group has been Verified Welcome");
-                    }
-
-                }
             }
         });
 

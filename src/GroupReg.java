@@ -2,6 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 public class GroupReg extends JPanel {
     public GroupReg(){
@@ -61,17 +65,41 @@ public class GroupReg extends JPanel {
         grpBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if(tfGrpNum.getText()!=""){
-                    int a = Integer.valueOf(tfGrpNum.getText())*500;
-                    tfGrpCharge.setText(String.valueOf(a));
-                    JOptionPane.showMessageDialog(null,"Sh " + a + " Will be debited");
-                    int mpesaNum= Integer.valueOf(JOptionPane.showInputDialog("Enter Mpesa NUmber"));
-                    if(mpesaNum >=10000000){
-                        JOptionPane.showMessageDialog(null," Amount " + a + " Will be debited from " + mpesaNum + " Mpesa Account");
-                    }else{
-                        JOptionPane.showMessageDialog(null,"Invalid Mpesa Number");
+
+                try{
+                    Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/MaringoSportsClub","root","#jonam.81");
+                    Statement statement = connection.createStatement();
+
+                    String insertToSql = "INSERT INTO group_registration(groupName,population,charge,groupType)VALUE(?,?,?,?)";
+                    PreparedStatement preparedStatement = connection.prepareStatement(insertToSql);
+
+                    preparedStatement.setString(1,tfGrpName.getText());
+                    preparedStatement.setInt(2,Integer.valueOf(tfGrpNum.getText()));
+                    preparedStatement.setString(4,String.valueOf(grpCb.getSelectedItem()));
+
+                    if(tfGrpNum.getText()!=""){
+                        int a = Integer.valueOf(tfGrpNum.getText())*500;
+                        tfGrpCharge.setText(String.valueOf(a));
+                        JOptionPane.showMessageDialog(null,"Sh " + a + " Will be debited");
+                        int mpesaNum= Integer.valueOf(JOptionPane.showInputDialog("Enter Mpesa NUmber"));
+                        if(mpesaNum >=10000000){
+                            JOptionPane.showMessageDialog(null," Amount " + a + " Will be debited from " + mpesaNum + " Mpesa Account");
+                            preparedStatement.setInt(3,Integer.valueOf(a));
+
+                        }else{
+                            JOptionPane.showMessageDialog(null,"Invalid Mpesa Number");
+                        }
                     }
+
+                    preparedStatement.executeUpdate();
+                    connection.close();
+                    JOptionPane.showMessageDialog(null,"Group has been Registered");
+
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+
+
             }
         });
 

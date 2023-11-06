@@ -2,10 +2,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Login extends JFrame {
     public Login(){
+
+
         setTitle("Maringo Sport Club");
         setSize(600,600);
         setLocationRelativeTo(null);
@@ -40,9 +46,37 @@ public class Login extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(tfName.getText()!=""){
-                    Main m = new Main();
-                    m.setVisible(true);
-                    dispose();
+                    boolean isPassCorrect = false;
+
+                    try{
+                        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/MaringoSportsClub","root","#jonam.81");
+                        Statement statement = connection.createStatement();
+
+                        String query = "SELECT *  FROM user_login WHERE userName='"+String.valueOf(tfName.getText())+"' AND passWord = '"+String.valueOf(tfPin.getText())+"'";
+                        ResultSet resultSet = statement.executeQuery(query);
+
+                        System.out.println(tfName.getText());
+                        System.out.println(tfPin.getText());
+
+                        if(resultSet.next()){
+                            JOptionPane.showMessageDialog(null,"Logged in");
+                            Main m = new Main();
+                            m.setVisible(true);
+                            dispose();
+                        }else{
+                            JOptionPane.showMessageDialog(null,"Try again");
+                        }
+
+
+                        resultSet.close();
+                        connection.close();
+
+
+                    }catch (Exception e){
+                      e.printStackTrace();
+                    }
+
+
                 }
             }
         });
