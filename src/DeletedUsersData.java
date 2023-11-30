@@ -1,5 +1,3 @@
-import jdk.jfr.Experimental;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -7,25 +5,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-public class RegUsersData extends JPanel {
-    public RegUsersData(){
+public class DeletedUsersData extends JPanel {
+    public DeletedUsersData(){
         setLayout(null);
         setBackground(Color.white);
 
-        JLabel lRegUserInfo = new JLabel("MARINGO REGISTERED USERS");
+        JLabel lRegUserInfo = new JLabel("MARINGO DELETED USERS");
         lRegUserInfo.setFont(new Font("SansSerif",Font.BOLD,40));
         lRegUserInfo.setBounds(450,80,700,50);
         add(lRegUserInfo);
 
-        JButton btnDeleteUser = new JButton("Delete User");
-        btnDeleteUser.setBounds(520,750,500,50);
-        btnDeleteUser.setBackground(Color.cyan);
-        add(btnDeleteUser);
+        JButton btnRestoreUser = new JButton("Restore User");
+        btnRestoreUser.setBounds(520,750,500,50);
+        btnRestoreUser.setBackground(Color.cyan);
+        add(btnRestoreUser);
 
-        JTable table = new JTable();
+        JTable tableDeletedUser= new JTable();
         DefaultTableModel tableModel = new DefaultTableModel();
 
-        btnDeleteUser.addActionListener(new ActionListener() {
+
+        //Restore user Function
+        btnRestoreUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
@@ -35,28 +35,28 @@ public class RegUsersData extends JPanel {
 
                     //Connection to deleted_users table
                     Connection connectionDeleted = DriverManager.getConnection("jdbc:mysql://localhost:3306/MaringoSportsClub","root","#jonam.81");
-                    String insertToDeletedUsers = "INSERT INTO deleted_users(userId,userName,userHeight,userWeight,userGender,NextofKin,instituteName,currentAge," +
-                            "subCounty,registerAs,specialNeed,charge,userRole)VALUE(?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                    PreparedStatement preparedStatement = connectionDeleted.prepareStatement(insertToDeletedUsers);
+                    String insertToRegUsers = "INSERT INTO user_registration(userName,userHeight,userWeight,userGender,NextofKin,instituteName,currentAge," +
+                            "subCounty,registerAs,specialNeed,charge,userRole)VALUE(?,?,?,?,?,?,?,?,?,?,?,?)";
+                    PreparedStatement preparedStatement = connectionDeleted.prepareStatement(insertToRegUsers);
 
                     if(a!=""){
-                        String getInfoQuery = "SELECT * FROM user_registration WHERE userId='"+a+"'";
+                        String getInfoQuery = "SELECT * FROM deleted_users WHERE userId='"+a+"'";
                         ResultSet resultSet = statement.executeQuery(getInfoQuery);
 
                         while (resultSet.next()){
-                            preparedStatement.setString(1,resultSet.getString("userId"));
-                            preparedStatement.setString(2,resultSet.getString("userName"));
-                            preparedStatement.setString(3,resultSet.getString("userHeight"));
-                            preparedStatement.setString(4,resultSet.getString("userWeight"));
-                            preparedStatement.setString(5,resultSet.getString("userGender"));
-                            preparedStatement.setString(6,resultSet.getString("NextofKin"));
-                            preparedStatement.setString(7,resultSet.getString("InstituteName"));
-                            preparedStatement.setString(8,resultSet.getString("CurrentAge"));
-                            preparedStatement.setString(9,resultSet.getString("SubCounty"));
-                            preparedStatement.setString(10,resultSet.getString("RegisterAs"));
-                            preparedStatement.setString(11,resultSet.getString("SpecialNeed"));
-                            preparedStatement.setString(12,resultSet.getString("charge"));
-                            preparedStatement.setString(13,resultSet.getString("userRole"));
+                            //preparedStatement.setString(1,resultSet.getString("userId"));
+                            preparedStatement.setString(1,resultSet.getString("userName"));
+                            preparedStatement.setString(2,resultSet.getString("userHeight"));
+                            preparedStatement.setString(3,resultSet.getString("userWeight"));
+                            preparedStatement.setString(4,resultSet.getString("userGender"));
+                            preparedStatement.setString(5,resultSet.getString("NextofKin"));
+                            preparedStatement.setString(6,resultSet.getString("InstituteName"));
+                            preparedStatement.setString(7,resultSet.getString("CurrentAge"));
+                            preparedStatement.setString(8,resultSet.getString("SubCounty"));
+                            preparedStatement.setString(9,resultSet.getString("RegisterAs"));
+                            preparedStatement.setString(10,resultSet.getString("SpecialNeed"));
+                            preparedStatement.setString(11,resultSet.getString("charge"));
+                            preparedStatement.setString(12,resultSet.getString("userRole"));
 
                             System.out.println(resultSet.getString("userName"));
 
@@ -65,13 +65,13 @@ public class RegUsersData extends JPanel {
 
                         int rowsAffected = preparedStatement.executeUpdate();
                         if(rowsAffected>0){
-                            JOptionPane.showMessageDialog(null,"Delete Successes");
+                            JOptionPane.showMessageDialog(null,"Restore Successes");
                         }else{
-                            JOptionPane.showMessageDialog(null,"ERROR : Delete Failed");
+                            JOptionPane.showMessageDialog(null,"ERROR : Restore Failed");
                         }
 
-                        //Delete user from table and add to deleted_users
-                        String deleteQuery="DELETE FROM user_registration WHERE userId='"+a+"'";
+                        //Delete user from deleted_users and add to user_registration
+                        String deleteQuery="DELETE FROM deleted_users WHERE userId='"+a+"'";
                         PreparedStatement preparedStatement1 = connection.prepareStatement(deleteQuery);
                         preparedStatement1.executeUpdate();//Execute Delete
 
@@ -105,15 +105,15 @@ public class RegUsersData extends JPanel {
         tableModel.addColumn("Special Need");
         tableModel.addColumn("Charge");
 
-        table.setModel(tableModel);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        //table.setBounds(300,300,1000,700);
+
+        tableDeletedUser.setModel(tableModel);
+        tableDeletedUser.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
 
         try{
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/MaringoSportsClub","root","#jonam.81");
             Statement statement = connection.createStatement();
-            String query = "SELECT * FROM user_registration";
+            String query = "SELECT * FROM deleted_users";
             ResultSet resultSet = statement.executeQuery(query);
 
             while(resultSet.next()){
@@ -132,12 +132,11 @@ public class RegUsersData extends JPanel {
                 String Charge = resultSet.getString("charge");
 
                 tableModel.addRow(new Object[]{userID,userName,userRole,userHeight,userWeight,userGender,NextofKin,InstituteName
-                ,CurrentAge,SubCounty,RegisteredAs,SpecialNeed,Charge});
+                        ,CurrentAge,SubCounty,RegisteredAs,SpecialNeed,Charge});
 
-                //tableModel.addRow();
             }
 
-            JScrollPane scrollPane = new JScrollPane(table);
+            JScrollPane scrollPane = new JScrollPane(tableDeletedUser);
             scrollPane.setBounds(170,200,1200,500);
 
             add(scrollPane);
@@ -152,3 +151,5 @@ public class RegUsersData extends JPanel {
         }
     }
 }
+
+

@@ -14,7 +14,8 @@ public class NewGame extends JPanel {
 
         JLabel lGameType=  new JLabel("GAME TYPE");
         lGameType.setFont(font);
-        String []gameTypes = {"Basket Ball"," FootBall"};
+        String []gameTypes = {"Swimming"," FootBall","Hockey","Lawn tennis","Table tennis","Dart","Badminton",
+                "Volley Ball","Netball","Basketball","Baseball","pool","Rugby","Draft","Chess"};
         JComboBox <String> cbGameType = new JComboBox<>(gameTypes);
         lGameType.setBounds(500,200,150,40);
         cbGameType.setBounds(700,200,350,40);

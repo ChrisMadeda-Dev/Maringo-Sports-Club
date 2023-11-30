@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Maringo Sports Club II:jar2">
+    <output-path>$PROJECT_DIR$/out/artifacts/Maringo_Sports_Club_II_jar2</output-path>
+    <root id="archive" name="Maringo Sports Club II.jar">
+      <element id="module-output" name="Maringo Sports Club II" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/mysql-connector-j-8.2.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

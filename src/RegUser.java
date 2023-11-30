@@ -29,21 +29,21 @@ public class RegUser extends JPanel {
         lUname.setFont(font);
         lUname.setBounds(500,100,200,30);
         JTextField tfUname= new JTextField();
-        tfUname.setBounds(700,100,300,30);
+        tfUname.setBounds(700,100,400,30);
         add(lUname);add(tfUname);
 
         JLabel lUnextofkin = new JLabel("NEXT OF KIN:");
         lUnextofkin.setFont(font);
         lUnextofkin.setBounds(500,140,200,30);
         JTextField tfUnextofkin= new JTextField();
-        tfUnextofkin.setBounds(700,140,300,30);
+        tfUnextofkin.setBounds(700,140,400,30);
         add(lUnextofkin);add(tfUnextofkin);
 
         JLabel lUtel = new JLabel("TELEPHONE NUM:");
         lUtel.setFont(font);
         lUtel.setBounds(500,180,200,30);
         JTextField tfUtel= new JTextField();
-        tfUtel.setBounds(700,180,300,30);
+        tfUtel.setBounds(700,180,400,30);
         add(lUtel);add(tfUtel);
 
         JLabel lUgender = new JLabel("GENDER");
@@ -51,35 +51,35 @@ public class RegUser extends JPanel {
         lUgender.setBounds(500,220,200,30);
         String []genderChoices = {"Male", "Female"};
         JComboBox <String> CbUgender= new JComboBox<>(genderChoices);
-        CbUgender.setBounds(700,220,300,30);
+        CbUgender.setBounds(700,220,400,30);
         add(lUgender);add(CbUgender);
 
-        JLabel lUweight = new JLabel("WEIGHT:");
+        JLabel lUweight = new JLabel("WEIGHT (KG):");
         lUweight.setFont(font);
         lUweight.setBounds(500,260,200,30);
         JTextField tfUweight= new JTextField();
-        tfUweight.setBounds(700,260,300,30);
+        tfUweight.setBounds(700,260,400,30);
         add(lUweight);add(tfUweight);
 
-        JLabel lUheight = new JLabel("HEIGHT:");
+        JLabel lUheight = new JLabel("HEIGHT (CM):");
         lUheight.setFont(font);
         lUheight.setBounds(500,300,200,30);
         JTextField tfUheight= new JTextField();
-        tfUheight.setBounds(700,300,300,30);
+        tfUheight.setBounds(700,300,400,30);
         add(lUheight);add(tfUheight);
 
         JLabel lUdateofbirth = new JLabel("DATE OF BIRTH:");
         lUdateofbirth.setFont(font);
         lUdateofbirth.setBounds(500,340,200,30);
         JTextField tfUdateofbirth= new JTextField();
-        tfUdateofbirth.setBounds(700,340,300,30);
+        tfUdateofbirth.setBounds(700,340,400,30);
         add(lUdateofbirth);add(tfUdateofbirth);
 
         JLabel lUage = new JLabel("CURRENT AGE:");
         lUage.setFont(font);
         lUage.setBounds(500,380,200,30);
         JTextField tfUage= new JTextField();
-        tfUage.setBounds(700,380,300,30);
+        tfUage.setBounds(700,380,400,30);
         add(lUage);add(tfUage);
 
 
@@ -87,7 +87,7 @@ public class RegUser extends JPanel {
         lUinstitute.setFont(font);
         lUinstitute.setBounds(500,420,200,30);
         JTextField tfUinstitute= new JTextField();
-        tfUinstitute.setBounds(700,420,300,30);
+        tfUinstitute.setBounds(700,420,400,30);
         add(lUinstitute);add(tfUinstitute);
 
         JLabel lUsubcounty = new JLabel("SUB COUNTY");
@@ -95,14 +95,14 @@ public class RegUser extends JPanel {
         lUsubcounty.setBounds(500,460,200,30);
         String []subcounties = {"Sofia","Sikijua","Kawagare","Kariako"};
         JComboBox <String> CbUsubcounty= new JComboBox<>(subcounties);
-        CbUsubcounty.setBounds(700,460,300,30);
+        CbUsubcounty.setBounds(700,460,400,30);
         add(lUsubcounty);add(CbUsubcounty);
 
         JLabel lUspecialneed = new JLabel("SPECIAL NEED:");
         lUspecialneed.setFont(font);
         lUspecialneed.setBounds(500,500,200,30);
         JTextField tfUspecialneed= new JTextField();
-        tfUspecialneed.setBounds(700,500,300,30);
+        tfUspecialneed.setBounds(700,500,400,30);
         add(lUspecialneed);add(tfUspecialneed);
 
         JLabel lUregas = new JLabel("REGISTER US");
@@ -110,11 +110,20 @@ public class RegUser extends JPanel {
         lUregas.setBounds(500,540,200,30);
         String []regChoices = {"Individual", "Group"};
         JComboBox <String> CbUregas= new JComboBox<>(regChoices);
-        CbUregas.setBounds(700,540,300,30);
+        CbUregas.setBounds(700,540,400,30);
         add(lUregas);add(CbUregas);
 
+        JLabel lRole = new JLabel("USER ROLE");
+        lRole.setFont(font);
+        lRole.setBounds(500,590,200,30);
+        String [] roleOpt = {"User","Administrator"};
+        JComboBox <String> cbRole = new JComboBox<>(roleOpt);
+        cbRole.setBounds(700,590,400,30);
+        add(lRole);add(cbRole);
+
         JButton btnRegUser = new JButton("REGISTER USER");
-        btnRegUser.setBounds(550,600,400,50);
+        btnRegUser.setBounds(550,650,400,50);
+        btnRegUser.setBackground(Color.cyan);
         add(btnRegUser);
 
         btnRegUser.addActionListener(new ActionListener() {
@@ -127,15 +136,15 @@ public class RegUser extends JPanel {
                     Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/MaringoSportsClub","root","#jonam.81");
                     Statement statement = connection.createStatement();
 
-                    String insertToSql= "INSERT INTO user_registration(userName,userHeight,userWeight,userGender,NextofKin,InstituteName, CurrentAge,SubCounty,RegisterAs,SpecialNeed,charge)" +
-                            "VALUE(?,?,?,?,?,?,?,?,?,?,?)";
+                    String insertToSql= "INSERT INTO user_registration(userName,userHeight,userWeight,userGender,NextofKin,InstituteName, CurrentAge,SubCounty,RegisterAs,SpecialNeed,charge,userRole)" +
+                            "VALUE(?,?,?,?,?,?,?,?,?,?,?,?)";
                     PreparedStatement preparedStatement = connection.prepareStatement(insertToSql);
 
                     //Get specific inputs
 
 
 
-                    if(tfUname.getText()!="" && tfUinstitute.getText() != "" && tfUtel.getText()!=""){
+                    if(!tfUname.getText().isEmpty() && !tfUinstitute.getText().isEmpty() && !tfUtel.getText().isEmpty()){
 
                         preparedStatement.setString(1,tfUname.getText());
                         preparedStatement.setInt(2,Integer.valueOf(tfUheight.getText()));
@@ -147,16 +156,17 @@ public class RegUser extends JPanel {
                         preparedStatement.setString(8,String.valueOf(CbUsubcounty.getSelectedItem()));
                         preparedStatement.setString(9,String.valueOf(CbUregas.getSelectedItem()));
                         preparedStatement.setString(10,tfUspecialneed.getText());
+                        preparedStatement.setString(12,String.valueOf(cbRole.getSelectedItem()));
+
 
 
                         String regAsChoice = (String) CbUregas.getSelectedItem();
 
                         if(regAsChoice == "Individual"){
-                            JOptionPane.showMessageDialog(null,"Your registering as Individual, Amount 1000 will be Debited");
+                            JOptionPane.showMessageDialog(null,"Your registering as an Individual, Amount 1000 will be Debited");
                             String a = JOptionPane.showInputDialog(null,"Enter Mpesa Number");
-                            int b = Integer.valueOf(a);
                             if(a.length()>=8){
-                                JOptionPane.showMessageDialog(null,"Amount " + b + " has been Debited");
+                                JOptionPane.showMessageDialog(null,"Amount " + 1000 + " has been Debited");
                                 preparedStatement.setString(11,"1000");
                             }else{
                                 JOptionPane.showMessageDialog(null,"Invalid Mpesa Number");
@@ -176,7 +186,16 @@ public class RegUser extends JPanel {
 
                     preparedStatement.executeUpdate();
                     connection.close();
-                    JOptionPane.showMessageDialog(null,"User is sucessfully Registered");
+                    JOptionPane.showMessageDialog(null,"User is successfully Registered");
+
+                    tfUname.setText("");
+                    tfUage.setText("");
+                    tfUdateofbirth.setText("");
+                    tfUtel.setText("");
+                    tfUheight.setText("");
+                    tfUweight.setText("");
+                    tfUinstitute.setText("");
+                    tfUnextofkin.setText("");
 
                 }catch (Exception e){
                     e.printStackTrace();

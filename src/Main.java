@@ -10,10 +10,18 @@ import java.awt.event.*;
 
 public class Main extends JFrame {
 
-    private JPanel mainPanel;
-    private  CardLayout cardLayout;
+    private String currentUser;
+    public static JPanel mainPanel;
+    public static CardLayout cardLayout;
+
+    //Sets the current User
+    public void setCurrentUser(String user){
+        currentUser = user;
+        JOptionPane.showMessageDialog(null,currentUser);
+    }
 
     public Main(){
+
         setTitle("Maringo Sports Club");
         setSize(1500,1000);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -21,8 +29,11 @@ public class Main extends JFrame {
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
 
+
         JMenuBar menuBar = new JMenuBar();
         menuBar.setPreferredSize(new Dimension(getContentPane().getWidth(),50));
+        Color lavenderColor = new Color(176,196,222);
+        //menuBar.setBackground(lavenderColor);
 
         JMenu dashBoardMenu = new JMenu("DashBoard");
         JMenu regMenu = new JMenu("Register");
@@ -30,6 +41,12 @@ public class Main extends JFrame {
         JMenu clubStoreMenu = new JMenu("Store");
         JMenu infoMenu = new JMenu("Info");
         JMenu recordsMenu = new JMenu("Records");
+
+        //sub Menu
+        JMenu usersSubMenu= new JMenu("USERS");
+        JMenu groupSubMenu = new JMenu("GROUPS");
+        JMenu gamesSubMenu = new JMenu("GAMES");
+        JMenu storeSubMenu = new JMenu("STORE");
 
         JMenuItem regUser = new JMenuItem("New User");
         JMenuItem regGroup = new JMenuItem("New Group");
@@ -40,8 +57,28 @@ public class Main extends JFrame {
         gamesMenu.add(newGameMenuItem);gamesMenu.add(returnGameItemsMI);
 
         JMenuItem infoRegUserDataItem = new JMenuItem("Registered Users");
+        JMenuItem infoRegGroupMI = new JMenuItem("Registered Groups");
+        JMenuItem infoDeletedUsers = new JMenuItem("Deleted Users");
         JMenuItem gamesPlayedMI = new JMenuItem("Games Played");
-        infoMenu.add(infoRegUserDataItem);infoMenu.add(gamesPlayedMI);
+        JMenuItem itemsDataMI = new JMenuItem("STORE ITEMS");
+        JMenuItem purchasedItemMI= new JMenuItem("Purchased Items");
+        JMenuItem returnedGameItemsMI = new JMenuItem("Returned Game Items");
+
+        usersSubMenu.add(infoRegUserDataItem);
+        usersSubMenu.add(infoDeletedUsers);
+
+        groupSubMenu.add(infoRegGroupMI);
+
+        gamesSubMenu.add(gamesPlayedMI);
+        gamesSubMenu.add(returnedGameItemsMI);
+
+        storeSubMenu.add(itemsDataMI);
+        storeSubMenu.add(purchasedItemMI);
+
+        infoMenu.add(usersSubMenu);
+        infoMenu.add(groupSubMenu);
+        infoMenu.add(gamesSubMenu);
+        infoMenu.add(storeSubMenu);
 
         JMenuItem updateItemMI = new JMenuItem("Update Items");
         recordsMenu.add(updateItemMI);
@@ -61,7 +98,13 @@ public class Main extends JFrame {
         NewGame newgame = new NewGame();
         ReturnGameItem returnGameItemPanel = new ReturnGameItem();
         RegUsersData regUsersData = new RegUsersData();
+        DeletedUsersData deletedUsersDataPanel = new DeletedUsersData();
+        GamesPlayedData gamesPlayedDataPanel = new GamesPlayedData();
+        RegisteredGroupsData registeredGroupsDataPanel = new RegisteredGroupsData();
+        PurchasedItemsData purchasedItemsDataPanel = new PurchasedItemsData();
+        ReturnedGameItemsData returnedGameItemsDataPanel = new ReturnedGameItemsData();
         UpdateItems updateItemsPanel = new UpdateItems();
+        ItemsData itemsDataPanel = new ItemsData();
 
 
         mainPanel.add(dashBoardPanel,"dashBoardPanel");
@@ -71,6 +114,12 @@ public class Main extends JFrame {
         mainPanel.add(newgame,"newGamePanel");
         mainPanel.add(returnGameItemPanel,"returnGameItemPanel");
         mainPanel.add(regUsersData,"regUserDataPanel");
+        mainPanel.add(deletedUsersDataPanel,"deletedUsersDataPanel");
+        mainPanel.add(registeredGroupsDataPanel,"regGroupsDataPanel");
+        mainPanel.add(gamesPlayedDataPanel,"gamesPlayedDataPanel");
+        mainPanel.add(purchasedItemsDataPanel,"purchasedItemsDataPanel");
+        mainPanel.add(returnedGameItemsDataPanel,"returnGameItemsDataPanel");
+        mainPanel.add(itemsDataPanel,"itemsDataPanel");
         mainPanel.add(updateItemsPanel,"updateItemsPanel");
 
 
@@ -78,17 +127,17 @@ public class Main extends JFrame {
         setVisible(true);
 
         dashBoardMenu.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON1) {
-                    // Handle the menu click here
-                    cardLayout.show(mainPanel,"dashBoardPanel");
-                }
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                cardLayout.show(mainPanel,"dashBoardPanel");
             }
         });
 
         clubStoreMenu.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
                 cardLayout.show(mainPanel,"clubStorePanel");
             }
         });
@@ -129,6 +178,48 @@ public class Main extends JFrame {
             }
         });
 
+        infoDeletedUsers.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                cardLayout.show(mainPanel,"deletedUsersDataPanel");
+            }
+        });
+
+        infoRegGroupMI.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                cardLayout.show(mainPanel,"regGroupsDataPanel");
+            }
+        });
+
+        gamesPlayedMI.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                cardLayout.show(mainPanel,"gamesPlayedDataPanel");
+            }
+        });
+
+        itemsDataMI.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                cardLayout.show(mainPanel,"itemsDataPanel");
+            }
+        });
+
+        purchasedItemMI.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                cardLayout.show(mainPanel,"purchasedItemsDataPanel");
+            }
+        });
+
+        returnedGameItemsMI.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                cardLayout.show(mainPanel,"returnGameItemsDataPanel");
+            }
+        });
+
         updateItemMI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -137,6 +228,8 @@ public class Main extends JFrame {
         });
 
     }
+
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
